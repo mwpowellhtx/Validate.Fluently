@@ -9,6 +9,11 @@
         /// </summary>
         protected const string ArgumentName = "arg";
 
+        /// <summary>
+        /// &quot;Value cannot be null.&quot;
+        /// </summary>
+        protected const string ValueCannotBeNullMessage = "Value cannot be null.";
+
         protected RequiresExtensionsTestFixtureBase(ITestOutputHelper outputHelper)
             : base(outputHelper)
         {

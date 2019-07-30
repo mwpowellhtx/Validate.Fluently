@@ -8,11 +8,6 @@ namespace Validation
 
     public class RequiresNotNullExtensionsTests : RequiresExtensionsTestFixtureBase
     {
-        /// <summary>
-        /// &quot;Value cannot be null.&quot;
-        /// </summary>
-        private const string NotNullMessage = "Value cannot be null.";
-
         public RequiresNotNullExtensionsTests(ITestOutputHelper outputHelper)
             : base(outputHelper)
         {
@@ -20,7 +15,7 @@ namespace Validation
 
         private static Action VerifyRequirement(IntPtr ptr, string argumentName, out string renderedMessage)
         {
-            renderedMessage = RenderArgumentMessage(NotNullMessage, argumentName);
+            renderedMessage = RenderArgumentMessage(ValueCannotBeNullMessage, argumentName);
             return () => ptr.RequiresNotNull(argumentName);
         }
 
@@ -47,7 +42,7 @@ namespace Validation
         private static Action VerifyClassRequirement<T>(T _, string argumentName, out string renderedMessage)
             where T : class
         {
-            renderedMessage = RenderArgumentMessage(NotNullMessage, argumentName);
+            renderedMessage = RenderArgumentMessage(ValueCannotBeNullMessage, argumentName);
             return () => _.RequiresNotNull(argumentName);
         }
 
@@ -85,13 +80,13 @@ namespace Validation
 
         private static Action VerifyTaskRequirement<T>(Task<T> task, string argumentName, out string renderedMessage)
         {
-            renderedMessage = RenderArgumentMessage(NotNullMessage, argumentName);
+            renderedMessage = RenderArgumentMessage(ValueCannotBeNullMessage, argumentName);
             return () => task.RequiresNotNull(argumentName);
         }
 
         private static Action VerifyTaskRequirement(Task task, string argumentName, out string renderedMessage)
         {
-            renderedMessage = RenderArgumentMessage(NotNullMessage, argumentName);
+            renderedMessage = RenderArgumentMessage(ValueCannotBeNullMessage, argumentName);
             return () => task.RequiresNotNull(argumentName);
         }
 
@@ -148,7 +143,7 @@ namespace Validation
 
         private static Action VerifyRequirementAllowStructs<T>(T value, string argumentName, out string renderedMessage)
         {
-            renderedMessage = RenderArgumentMessage(NotNullMessage, argumentName);
+            renderedMessage = RenderArgumentMessage(ValueCannotBeNullMessage, argumentName);
             return () => value.RequiresNotNullAllowStructs(argumentName);
         }
 
