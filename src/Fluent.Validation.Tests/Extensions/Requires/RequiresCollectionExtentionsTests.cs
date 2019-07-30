@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Validation
 {
@@ -24,6 +25,11 @@ namespace Validation
         /// &quot;&apos;arg&apos; cannot be an empty string (\&quot;\&quot;) or start with the null character.&quot;
         /// </summary>
         private const string NullOrEmptyStringFormat = "'arg' cannot be an empty string (\"\") or start with the null character.";
+
+        /// <summary>
+        /// &quot;The parameter \&quot;{0}\&quot; cannot consist entirely of white space characters.&quot;
+        /// </summary>
+        private const string WhiteSpaceStringFormat = "The parameter \"{0}\" cannot consist entirely of white space characters.";
 
         public RequiresCollectionExtensionsTests(ITestOutputHelper outputHelper)
             : base(outputHelper)
@@ -100,7 +106,7 @@ namespace Validation
             Verify(ValidCollection);
         }
 
-        private static Action VerifyNotNullOrEmpty(string value, string argumentName, out string renderedMessage, string expectedMessage = null)
+        private static Action VerifyNotNullOrEmpty(IEnumerable value, string argumentName, out string renderedMessage, string expectedMessage = null)
         {
             renderedMessage = RenderArgumentMessage(
                 (expectedMessage ?? DefaultMessage).AssertNotNull().AssertNotEmpty()
@@ -108,7 +114,10 @@ namespace Validation
             return () => value.RequiresNotNullOrEmpty(argumentName);
         }
 
-        private static Action VerifyNotNullOrEmpty(IEnumerable value, string argumentName, out string renderedMessage, string expectedMessage = null)
+        private static IEnumerable VerifyNotNullOrEmpty(IEnumerable value, string argumentName)
+            => value.RequiresNotNullOrEmpty(argumentName);
+
+        private static Action VerifyNotNullOrEmpty(string value, string argumentName, out string renderedMessage, string expectedMessage = null)
         {
             renderedMessage = RenderArgumentMessage(
                 (expectedMessage ?? DefaultMessage).AssertNotNull().AssertNotEmpty()
@@ -119,33 +128,16 @@ namespace Validation
         private static string VerifyNotNullOrEmpty(string value, string argumentName)
             => value.RequiresNotNullOrEmpty(argumentName);
 
-        private static IEnumerable VerifyNotNullOrEmpty(IEnumerable value, string argumentName)
-            => value.RequiresNotNullOrEmpty(argumentName);
+        private static Action VerifyNotNullOrWhiteSpace(string value, string argumentName, out string renderedMessage, string expectedMessage = null)
+        {
+            renderedMessage = RenderArgumentMessage(
+                (expectedMessage ?? DefaultMessage).AssertNotNull().AssertNotEmpty()
+                , argumentName.AssertNotNull().AssertNotEmpty());
+            return () => value.RequiresNotNullOrWhiteSpace(argumentName);
+        }
 
-        [Fact]
-        public void Null_String_Throws()
-            => VerifyNotNullOrEmpty((string) null, ArgumentName, out var renderedMessage, ValueCannotBeNullMessage)
-                .AssertThrows<ArgumentNullException>().Verify(ex =>
-                {
-                    ex.AssertNotNull().ParamName.AssertEqual(ArgumentName);
-                    renderedMessage.AssertNotNull().AssertNotEmpty();
-                    ex.Message.AssertNotNull().AssertEqual(renderedMessage);
-                });
-
-        [Fact]
-        public void Empty_String_Throws()
-            => VerifyNotNullOrEmpty(Empty, ArgumentName, out var renderedMessage, NullOrEmptyStringFormat)
-                .AssertThrows<ArgumentException>().Verify(ex =>
-                {
-                    ex.AssertNotNull().ParamName.AssertEqual(ArgumentName);
-                    renderedMessage.AssertNotNull().AssertNotEmpty();
-                    ex.Message.AssertNotNull().AssertEqual(renderedMessage);
-                });
-
-        [Fact]
-        public void Valid_String_Does_Not_Throw()
-            => VerifyNotNullOrEmpty(ThisIsATest, ArgumentName)
-                .AssertEqual(ThisIsATest);
+        private static string VerifyNotNullOrWhiteSpace(string value, string argumentName)
+            => value.RequiresNotNullOrWhiteSpace(argumentName);
 
         [Fact]
         public void Null_Enumerable_Throws()
@@ -171,6 +163,68 @@ namespace Validation
         [Fact]
         public void Valid_Enumerable_Does_Not_Throw()
             => VerifyNotNullOrEmpty((IEnumerable) ThisIsATest, ArgumentName)
+                .AssertEqual(ThisIsATest);
+
+        [Fact]
+        public void Not_Null_Or_Empty_Null_String_Throws()
+            => VerifyNotNullOrEmpty(null, ArgumentName, out var renderedMessage, ValueCannotBeNullMessage)
+                .AssertThrows<ArgumentNullException>().Verify(ex =>
+                {
+                    ex.AssertNotNull().ParamName.AssertEqual(ArgumentName);
+                    renderedMessage.AssertNotNull().AssertNotEmpty();
+                    ex.Message.AssertNotNull().AssertEqual(renderedMessage);
+                });
+
+        [Fact]
+        public void Not_Null_Or_Empty_Empty_String_Throws()
+            => VerifyNotNullOrEmpty(Empty, ArgumentName, out var renderedMessage, NullOrEmptyStringFormat)
+                .AssertThrows<ArgumentException>().Verify(ex =>
+                {
+                    ex.AssertNotNull().ParamName.AssertEqual(ArgumentName);
+                    renderedMessage.AssertNotNull().AssertNotEmpty();
+                    ex.Message.AssertNotNull().AssertEqual(renderedMessage);
+                });
+
+        [Fact]
+        public void Not_Null_Or_Empty_Valid_String_Does_Not_Throw()
+            => VerifyNotNullOrEmpty(ThisIsATest, ArgumentName)
+                .AssertEqual(ThisIsATest);
+
+        [Fact]
+        public void Not_Null_Or_WhiteSpace_Null_String_Throws()
+            => VerifyNotNullOrWhiteSpace(null, ArgumentName, out var renderedMessage, ValueCannotBeNullMessage)
+                .AssertThrows<ArgumentNullException>().Verify(ex =>
+                {
+                    ex.AssertNotNull().ParamName.AssertEqual(ArgumentName);
+                    renderedMessage.AssertNotNull().AssertNotEmpty();
+                    ex.Message.AssertNotNull().AssertEqual(renderedMessage);
+                });
+
+        [Theory
+         , InlineData("")
+         , InlineData(" ")
+         , InlineData("\t")
+         , InlineData("\r")
+         , InlineData("\n")
+         , InlineData("\f")]
+        public void Not_Null_Or_WhiteSpace_Empty_Or_WhiteSpace_String_Throws(string value)
+        {
+            // ReSharper disable once SwitchStatementMissingSomeCases
+            var expectedMessageFormat = value.Length == 0 ? NullOrEmptyStringFormat : WhiteSpaceStringFormat;
+
+            VerifyNotNullOrWhiteSpace(value, ArgumentName, out var renderedMessage
+                    , Format(expectedMessageFormat.AssertNotNull().AssertNotEmpty(), ArgumentName))
+                .AssertThrows<ArgumentException>().Verify(ex =>
+                {
+                    ex.AssertNotNull().ParamName.AssertEqual(ArgumentName);
+                    renderedMessage.AssertNotNull().AssertNotEmpty();
+                    ex.Message.AssertNotNull().AssertEqual(renderedMessage);
+                });
+        }
+
+        [Fact]
+        public void Not_Null_Or_WhiteSpace_Valid_String_Does_Not_Throw()
+            => VerifyNotNullOrWhiteSpace(ThisIsATest, ArgumentName)
                 .AssertEqual(ThisIsATest);
     }
 }
