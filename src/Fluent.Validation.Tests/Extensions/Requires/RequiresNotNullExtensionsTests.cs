@@ -138,5 +138,38 @@ namespace Validation
                     ex.Message.AssertNotNull().AssertEqual(renderedMessage);
                 });
         }
+
+        private class A
+        {
+            internal A()
+            {
+            }
+        }
+
+        private static Action VerifyRequirementAllowStructs<T>(T value, string argumentName, out string renderedMessage)
+        {
+            renderedMessage = RenderArgumentMessage(NotNullMessage, argumentName);
+            return () => value.RequiresNotNullAllowStructs(argumentName);
+        }
+
+        private static T VerifyRequirementAllowStructs<T>(T value, string argumentName)
+            => value.RequiresNotNullAllowStructs(argumentName);
+
+        [Fact]
+        public void Class_Not_Null_Allow_Structs_Can_Fail()
+        {
+            VerifyRequirementAllowStructs((A) null, ArgumentName, out var renderedMessage)
+                .AssertThrows<ArgumentNullException>().Verify(ex =>
+                {
+                    ex.AssertNotNull().ParamName.AssertEqual(ArgumentName);
+                    renderedMessage.AssertNotNull().AssertNotEmpty();
+                    ex.Message.AssertNotNull().AssertEqual(renderedMessage);
+                });
+        }
+
+        [Fact]
+        public void Struct_Not_Null_Allow_Structs_Does_Not_Fail()
+            => VerifyRequirementAllowStructs<int>(default, ArgumentName)
+                .AssertNotNull().AssertEqual(default);
     }
 }
