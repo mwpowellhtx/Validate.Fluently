@@ -97,6 +97,36 @@ namespace Validation
             => evaluate.Invoke(value) ? default : Requires.FailRange(argumentName, message.UseCallbackOrDefault().Invoke());
 
         /// <summary>
+        /// Throws an <see cref="ArgumentOutOfRangeException"/> if a <paramref name="condition"/>
+        /// Does Not Evaluate to True.
+        /// </summary>
+        /// <param name="condition"></param>
+        /// <param name="argumentName"></param>
+        /// <param name="message"></param>
+        /// <returns>The <paramref name="condition"/> after Range is Required.</returns>
+        public static bool RequiresRange(this bool condition, string argumentName, FluentMessageCallback message = null)
+        {
+            Requires.Range(condition, argumentName, message.UseCallbackOrDefault().Invoke());
+            return condition;
+        }
+
+        /// <summary>
+        /// Throws an <see cref="ArgumentOutOfRangeException"/> if a <paramref name="condition"/>
+        /// Does Not Evaluate to True.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="value"></param>
+        /// <param name="condition"></param>
+        /// <param name="argumentName"></param>
+        /// <param name="message"></param>
+        /// <returns>The <paramref name="value"/> after Range <paramref name="condition"/> is Required.</returns>
+        public static T RequiresRange<T>(this T value, FluentConditionCallback<T> condition, string argumentName, FluentMessageCallback message = null)
+        {
+            Requires.Range(condition.Invoke(value), argumentName, message.UseCallbackOrDefault().Invoke());
+            return value;
+        }
+
+        /// <summary>
         /// Throws an <see cref="ArgumentException"/> if the specified <paramref name="value"/>
         /// is Equal to the Default Value of the <see cref="Type"/> <typeparamref name="T"/>.
         /// </summary>
@@ -254,36 +284,6 @@ namespace Validation
             Requires.NullOrNotNullElements(values, argumentName);
             return values;
             // ReSharper restore PossibleMultipleEnumeration
-        }
-
-        /// <summary>
-        /// Throws an <see cref="ArgumentOutOfRangeException"/> if a <paramref name="condition"/>
-        /// Does Not Evaluate to True.
-        /// </summary>
-        /// <param name="condition"></param>
-        /// <param name="argumentName"></param>
-        /// <param name="message"></param>
-        /// <returns>The <paramref name="condition"/> after Range is Required.</returns>
-        public static bool RequiresRange(this bool condition, string argumentName, FluentMessageCallback message = null)
-        {
-            Requires.Range(condition, argumentName, message.UseCallbackOrDefault().Invoke());
-            return condition;
-        }
-
-        /// <summary>
-        /// Throws an <see cref="ArgumentOutOfRangeException"/> if a <paramref name="condition"/>
-        /// Does Not Evaluate to True.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="value"></param>
-        /// <param name="condition"></param>
-        /// <param name="argumentName"></param>
-        /// <param name="message"></param>
-        /// <returns>The <paramref name="value"/> after Range <paramref name="condition"/> is Required.</returns>
-        public static T RequiresRange<T>(this T value, FluentConditionCallback<T> condition, string argumentName, FluentMessageCallback message = null)
-        {
-            Requires.Range(condition.Invoke(value), argumentName, message.UseCallbackOrDefault().Invoke());
-            return value;
         }
 
         /// <summary>
