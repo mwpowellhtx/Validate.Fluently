@@ -84,8 +84,8 @@ namespace Validation
 
         // TODO: TBD: `out of range´ of what? would it not be worth specifying in terms of at least an IEnumerable<T>?
         /// <summary>
-        /// Throws an <see cref="ArgumentOutOfRangeException"/> if a <paramref name="value"/>
-        /// does not <paramref name="evaluate"/> to true.
+        /// Throws an <see cref="ArgumentOutOfRangeException"/> when <paramref name="value"/>
+        /// <paramref name="evaluate"/> returns false.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="value"></param>
@@ -94,7 +94,7 @@ namespace Validation
         /// <param name="message"></param>
         /// <returns>Nothing. This method always throws.</returns>
         public static Exception RequiresFailRange<T>(this T value, string argumentName, FluentRangeVerificationCallback<T> evaluate, FluentMessageCallback message = null)
-            => evaluate.Invoke(value) ? Requires.FailRange(argumentName, message.UseCallbackOrDefault().Invoke()) : default;
+            => evaluate.Invoke(value) ? default : Requires.FailRange(argumentName, message.UseCallbackOrDefault().Invoke());
 
         /// <summary>
         /// Throws an <see cref="ArgumentException"/> if the specified <paramref name="value"/>
