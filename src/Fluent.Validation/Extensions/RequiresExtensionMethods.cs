@@ -256,11 +256,11 @@ namespace Validation
 
         /// <summary>
         /// Throws an exception if the specified <paramref name="value"/> is Null, Empty,
-        /// or White Space.
+        /// or Whitespace.
         /// </summary>
         /// <param name="value">The Value of the argument.</param>
         /// <param name="argumentName">The name of the argument to include in any thrown exception.</param>
-        /// <returns>The <paramref name="value"/> after Not Null, Empty or White Space is Required.</returns>
+        /// <returns>The <paramref name="value"/> after Not Null, Empty or Whitespace is Required.</returns>
         /// <exception cref="ArgumentException">Thrown if <paramref name="value"/> is Null or Empty.</exception>
         public static string RequiresNotNullOrWhiteSpace(this string value, string argumentName)
         {
