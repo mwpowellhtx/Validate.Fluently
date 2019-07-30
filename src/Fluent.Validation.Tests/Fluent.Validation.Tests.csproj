@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <Version>1.0.0.139</Version>
+    <AssemblyVersion>1.0.0.139</AssemblyVersion>
+    <FileVersion>1.0.0.139</FileVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Fluent.Validation.Tests.csproj.DotSettings" />
+  </ItemGroup>
+
+  <!-- ReSharper disable UnknownProperty -->
+  <ItemGroup>
+    <PackageReference Include="xunit.fluently.assert" Version="$(XunitFluentlyAssertVersion)" />
+    <PackageReference Include="xunit" Version="$(XunitVersion)" />
+    <PackageReference Include="xunit.fluently.assert.exceptionally" Version="$(XunitFluentlyExceptionallyVersion)" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="$(XunitVersion)">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+  <!-- ReSharper restore UnknownProperty -->
+
+  <ItemGroup>
+    <ProjectReference Include="..\Fluent.Validation\Fluent.Validation.csproj" />
+  </ItemGroup>
+
+  <!-- ReSharper disable UnknownProperty -->
+  <ImportGroup>
+    <!-- Because Targets such as this do not seem to be imported for the multi-target use case. -->
+    <Import Project="..\packages\BumpAssemblyVersions\$(BumpAssemblyVersionsVersion)\build\BumpAssemblyVersions.targets" Condition="Exists('..\packages\BumpAssemblyVersions\$(BumpAssemblyVersionsVersion)\build\BumpAssemblyVersions.targets')" />
+  </ImportGroup>
+  <!-- ReSharper restore UnknownProperty -->
+
+</Project>
