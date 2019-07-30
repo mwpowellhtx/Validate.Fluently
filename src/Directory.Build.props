@@ -6,6 +6,7 @@
     <Product>Fluent.Validation</Product>
     <Copyright>Copyright (c) 2019</Copyright>
     <LangVersion>7.3</LangVersion>
+    <NoWarn>$(NoWarn);NU1603</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Platform)'=='AnyCPU'">
