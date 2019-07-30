@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Provides the basis for a first class experience specifying SAT-CP solver parameters.</Description>
+    <PackageTags>Google; Operations; Research; Tools; SAT; CP; CSP; constraint; satisfaction; problem; solver; parameter; parameters; Variant; IVariant</PackageTags>
+    <TargetFrameworks>netstandard1.0;netstandard1.3</TargetFrameworks>
+    <!--<TargetFrameworks>netstandard1.0;netstandard1.3;netstandard2.0</TargetFrameworks>-->
+    <!--<TargetFrameworks>netstandard1.0;netstandard1.3;net45;net40;net20;portable-net45+win8+wpa81+wp8;portable-net4+sl50+win8+wpa81+wp8</TargetFrameworks>-->
+    <Version>1.0.0.73</Version>
+    <AssemblyVersion>1.0.0.73</AssemblyVersion>
+    <FileVersion>1.0.0.73</FileVersion>
+    <PackageVersion>1.0.0.73</PackageVersion>
+  </PropertyGroup>
+
+  <!-- ReSharper disable UnknownProperty -->
+  <PropertyGroup>
+    <DefineConstants Condition="'$(TargetFramework)'=='netstandard1.0'">$(DefineConstants);NETSTANDARD1_0</DefineConstants>
+    <DefineConstants Condition="'$(TargetFramework)'=='netstandard1.3'">$(DefineConstants);NETSTANDARD1_3</DefineConstants>
+  </PropertyGroup>
+  <!-- ReSharper restore UnknownProperty -->
+
+  <!-- ReSharper disable UnknownProperty -->
+  <PropertyGroup Condition="'$(Platform)'=='AnyCPU'">
+    <DocumentationFile Condition="'$(TargetFramework)'=='netstandard1.0'">bin\$(Configuration)\netstandard1.0\Fluent.Validation.xml</DocumentationFile>
+    <DocumentationFile Condition="'$(TargetFramework)'=='netstandard1.3'">bin\$(Configuration)\netstandard1.3\Fluent.Validation.xml</DocumentationFile>
+  </PropertyGroup>
+  <!-- ReSharper restore UnknownProperty -->
+
+  <ItemGroup>
+    <None Remove="Fluent.Validation.csproj.DotSettings" />
+  </ItemGroup>
+
+  <!-- ReSharper disable UnknownProperty -->
+  <ImportGroup>
+    <!-- Because Targets such as this do not seem to be imported for the multi-target use case. -->
+    <Import Project="..\packages\BumpAssemblyVersions\$(BumpAssemblyVersionsVersion)\build\BumpAssemblyVersions.targets" Condition="'$(TargetFrameworks)' != '' And Exists('..\packages\BumpAssemblyVersions\$(BumpAssemblyVersionsVersion)\build\BumpAssemblyVersions.targets')" />
+  </ImportGroup>
+  <!-- ReSharper restore UnknownProperty -->
+
+</Project>
