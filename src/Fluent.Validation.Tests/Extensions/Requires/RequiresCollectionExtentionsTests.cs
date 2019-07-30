@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Validation
@@ -107,12 +108,23 @@ namespace Validation
             return () => value.RequiresNotNullOrEmpty(argumentName);
         }
 
+        private static Action VerifyNotNullOrEmpty(IEnumerable value, string argumentName, out string renderedMessage, string expectedMessage = null)
+        {
+            renderedMessage = RenderArgumentMessage(
+                (expectedMessage ?? DefaultMessage).AssertNotNull().AssertNotEmpty()
+                , argumentName.AssertNotNull().AssertNotEmpty());
+            return () => value.RequiresNotNullOrEmpty(argumentName);
+        }
+
         private static string VerifyNotNullOrEmpty(string value, string argumentName)
+            => value.RequiresNotNullOrEmpty(argumentName);
+
+        private static IEnumerable VerifyNotNullOrEmpty(IEnumerable value, string argumentName)
             => value.RequiresNotNullOrEmpty(argumentName);
 
         [Fact]
         public void Null_String_Throws()
-            => VerifyNotNullOrEmpty(null, ArgumentName, out var renderedMessage, ValueCannotBeNullMessage)
+            => VerifyNotNullOrEmpty((string) null, ArgumentName, out var renderedMessage, ValueCannotBeNullMessage)
                 .AssertThrows<ArgumentNullException>().Verify(ex =>
                 {
                     ex.AssertNotNull().ParamName.AssertEqual(ArgumentName);
@@ -133,6 +145,32 @@ namespace Validation
         [Fact]
         public void Valid_String_Does_Not_Throw()
             => VerifyNotNullOrEmpty(ThisIsATest, ArgumentName)
+                .AssertEqual(ThisIsATest);
+
+        [Fact]
+        public void Null_Enumerable_Throws()
+            => VerifyNotNullOrEmpty((IEnumerable) null, ArgumentName, out var renderedMessage, ValueCannotBeNullMessage)
+                .AssertThrows<ArgumentNullException>().Verify(ex =>
+                {
+                    ex.AssertNotNull().ParamName.AssertEqual(ArgumentName);
+                    renderedMessage.AssertNotNull().AssertNotEmpty();
+                    ex.Message.AssertNotNull().AssertEqual(renderedMessage);
+                });
+
+        [Fact]
+        public void Empty_Enumerable_Throws()
+            => VerifyNotNullOrEmpty((IEnumerable) Empty, ArgumentName, out var renderedMessage
+                    , Format(EmptyCollectionMessageFormat, ArgumentName))
+                .AssertThrows<ArgumentException>().Verify(ex =>
+                {
+                    ex.AssertNotNull().ParamName.AssertEqual(ArgumentName);
+                    renderedMessage.AssertNotNull().AssertNotEmpty();
+                    ex.Message.AssertNotNull().AssertEqual(renderedMessage);
+                });
+
+        [Fact]
+        public void Valid_Enumerable_Does_Not_Throw()
+            => VerifyNotNullOrEmpty((IEnumerable) ThisIsATest, ArgumentName)
                 .AssertEqual(ThisIsATest);
     }
 }
