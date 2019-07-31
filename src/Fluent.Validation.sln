@@ -16,7 +16,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution", "Solution", "{3F
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{D3CFFFA3-3913-4729-8457-EC734878DA53}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fluent.Validation.Tests", "Fluent.Validation.Tests\Fluent.Validation.Tests.csproj", "{9CB043A7-FA0B-45FA-8733-26EA6CB97607}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fluent.Validation.Tests", "Fluent.Validation.Tests\Fluent.Validation.Tests.csproj", "{9CB043A7-FA0B-45FA-8733-26EA6CB97607}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,7 +31,6 @@ Global
 		{9CB043A7-FA0B-45FA-8733-26EA6CB97607}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9CB043A7-FA0B-45FA-8733-26EA6CB97607}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9CB043A7-FA0B-45FA-8733-26EA6CB97607}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9CB043A7-FA0B-45FA-8733-26EA6CB97607}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
