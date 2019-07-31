@@ -54,12 +54,12 @@ namespace Validation
         /// Throws an <see cref="ObjectDisposedException"/> when <paramref name="condition"/>
         /// is False.
         /// </summary>
-        /// <param name="condition">the condition which returns True to avoid <see cref="ObjectDisposedException"/>.</param>
-        /// <param name="message">The message to use for the thrown exception.</param>
+        /// <param name="condition">The condition which returns True to avoid <see cref="ObjectDisposedException"/>.</param>
+        /// <param name="objectName">The ObjectName to use for the thrown exception.</param>
         /// <returns>The <paramref name="condition"/> after Not Disposed is Verified.</returns>
-        public static bool VerifyNotDisposed(this bool condition, FluentMessageCallback message)
+        public static bool VerifyNotDisposed(this bool condition, string objectName)
         {
-            Verify.NotDisposed(condition, message.Invoke());
+            Verify.NotDisposed(condition, objectName);
             return condition;
         }
 
@@ -67,45 +67,59 @@ namespace Validation
         /// Throws an <see cref="ObjectDisposedException"/> when <paramref name="condition"/>
         /// is False.
         /// </summary>
-        /// <param name="disposedValue">The Disposed Value.</param>
-        /// <param name="condition">the condition which returns True to avoid <see cref="ObjectDisposedException"/>.</param>
-        /// <param name="message">The message to use for the thrown exception.</param>
-        /// <returns>The <paramref name="disposedValue"/> after Not Disposed <paramref name="condition"/> is Verified.</returns>
-        public static object VerifyNotDisposed(this object disposedValue, FluentConditionCallback<object> condition, FluentMessageCallback message)
+        /// <param name="value">The Disposed Value.</param>
+        /// <param name="objectName">The ObjectName to use for the thrown exception.</param>
+        /// <param name="condition">The condition which returns True to avoid <see cref="ObjectDisposedException"/>.</param>
+        /// <returns>The <paramref name="value"/> after Not Disposed <paramref name="condition"/> is Verified.</returns>
+        public static object VerifyValueNotDisposedConditionOnly(this object value, string objectName, FluentConditionCallback<object> condition)
         {
-            Verify.NotDisposed(condition.Invoke(disposedValue), message.Invoke());
-            return disposedValue;
+            Verify.NotDisposed(condition.Invoke(value), objectName);
+            return value;
         }
 
         /// <summary>
         /// Throws an <see cref="ObjectDisposedException"/> when <paramref name="condition"/>
-        /// is False.
+        /// is False. Unlike the Condition Only extension method, this method passes the
+        /// <paramref name="value"/> through to the API.
         /// </summary>
-        /// <typeparam name="T">The Value type.</typeparam>
-        /// <param name="disposedValue">the Disposed Value.</param>
-        /// <param name="condition">the condition which returns True to avoid <see cref="ObjectDisposedException"/>.</param>
-        /// <param name="message">The message to use for the thrown exception.</param>
-        /// <returns>The <paramref name="disposedValue"/> after Not Disposed <paramref name="condition"/> is Verified.</returns>
-        public static T VerifyNotDisposed<T>(this T disposedValue, FluentConditionCallback<T> condition, FluentMessageCallback message)
-            where T : IDisposable
-        {
-            Verify.NotDisposed(condition.Invoke(disposedValue), message.Invoke());
-            return disposedValue;
-        }
-
-        /// <summary>
-        /// Throws an <see cref="ObjectDisposedException"/> when <paramref name="condition"/>
-        /// is False.
-        /// </summary>
-        /// <typeparam name="T">The Value type.</typeparam>
-        /// <param name="disposedValue">The Disposed Value.</param>
+        /// <param name="value">The Disposed Value.</param>
         /// <param name="condition">The condition which returns True to avoid <see cref="ObjectDisposedException"/>.</param>
         /// <param name="message">The message to use for the thrown exception.</param>
-        /// <returns>The <paramref name="disposedValue"/> after Not Disposed <paramref name="condition"/> is Verified.</returns>
-        public static T VerifyNotDisposedObservable<T>(this T disposedValue, FluentConditionCallback<T> condition, FluentMessageCallback message)
+        /// <returns>The <paramref name="value"/> after Not Disposed <paramref name="condition"/> is Verified.</returns>
+        public static object VerifyValueNotDisposed(this object value, FluentConditionCallback<object> condition, FluentMessageCallback message = null)
+        {
+            Verify.NotDisposed(condition.Invoke(value), value, message?.Invoke());
+            return value;
+        }
+
+        /// <summary>
+        /// Throws an <see cref="ObjectDisposedException"/> when <paramref name="condition"/>
+        /// is False.
+        /// </summary>
+        /// <typeparam name="T">The Value type.</typeparam>
+        /// <param name="value">The Value whose <see cref="IDisposable"/> is under consideration.</param>
+        /// <param name="condition">the condition which returns True to avoid <see cref="ObjectDisposedException"/>.</param>
+        /// <param name="message">The message to use for the thrown exception.</param>
+        /// <returns>The <paramref name="value"/> after Not Disposed <paramref name="condition"/> is Verified.</returns>
+        public static T VerifyValueNotDisposed<T>(this T value, FluentConditionCallback<T> condition, FluentMessageCallback message = null)
+            where T : IDisposable
+        {
+            Verify.NotDisposed(condition.Invoke(value), value, message?.Invoke());
+            return value;
+        }
+
+        /// <summary>
+        /// Throws an <see cref="ObjectDisposedException"/> when
+        /// <see cref="IDisposableObservable.IsDisposed"/> is False.
+        /// </summary>
+        /// <typeparam name="T">The Value type.</typeparam>
+        /// <param name="disposedValue">The Disposed Value whose <see cref="IDisposableObservable"/> is under consideration.</param>
+        /// <param name="message">The message to use for the thrown exception.</param>
+        /// <returns>The <paramref name="disposedValue"/> after Not Disposed is Verified.</returns>
+        public static T VerifyObservableValueNotDisposed<T>(this T disposedValue, FluentMessageCallback message)
             where T : IDisposableObservable
         {
-            Verify.NotDisposed(condition.Invoke(disposedValue), message.Invoke());
+            Verify.NotDisposed(disposedValue, message.Invoke());
             return disposedValue;
         }
 
