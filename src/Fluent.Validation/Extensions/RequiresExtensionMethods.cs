@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Validation
 {
@@ -34,7 +33,7 @@ namespace Validation
         /// <returns></returns>
         public static T RequiresArgument<T>(this T argument, FluentConditionCallback<T> condition, string argumentName, FluentMessageCallback message)
         {
-            Requires.Argument(condition(argument), argumentName, message.Invoke());
+            Requires.Argument(condition.Invoke(argument), argumentName, message.Invoke());
             return argument;
         }
 
@@ -58,8 +57,6 @@ namespace Validation
             return value;
         }
 
-        // TODO: TBD: this is work, and it is mostly just meticulous, very detail oriented... not that I mind it... but I want to refocus on the CG/Sat OrTools stuff...
-        // TODO: TBD: pick up testing here ...
         /// <summary>
         /// Throws an <see cref="ArgumentException"/>.
         /// </summary>
@@ -94,7 +91,7 @@ namespace Validation
         /// <param name="message"></param>
         /// <returns>Nothing. This method always throws.</returns>
         public static Exception RequiresFailRange<T>(this T value, string argumentName, FluentRangeVerificationCallback<T> evaluate, FluentMessageCallback message = null)
-            => evaluate.Invoke(value) ? default : Requires.FailRange(argumentName, message.UseCallbackOrDefault().Invoke());
+            => evaluate.Invoke(value) ? null : Requires.FailRange(argumentName, message.UseCallbackOrDefault().Invoke());
 
         /// <summary>
         /// Throws an <see cref="ArgumentOutOfRangeException"/> if a <paramref name="condition"/>
@@ -142,17 +139,20 @@ namespace Validation
             return value;
         }
 
+#if !NET20
+
         /// <summary>
         /// Throws an exception if the specified <paramref name="value"/> is Null.
         /// </summary>
-        /// <typeparam name="T">The type of the return value of the <see cref="Task{TResult}"/>.</typeparam>
+        /// <typeparam name="T">The type of the return value of the
+        /// <see cref="System.Threading.Tasks.Task{TResult}"/>.</typeparam>
         /// <param name="value">The Value of the argument.</param>
         /// <param name="argumentName">The name of the argument to include in any thrown exception.</param>
         /// <returns>The <paramref name="value"/> after Not Null is Required.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="value"/> is Null.</exception>
         /// <remarks>This method allows async methods to use <see cref="Requires.NotNull{T}(T,string)"/>
         /// without having to assign the result to local variables to avoid CSharp warnings.</remarks>
-        public static Task<T> RequiresNotNull<T>(this Task<T> value, string argumentName)
+        public static System.Threading.Tasks.Task<T> RequiresNotNull<T>(this System.Threading.Tasks.Task<T> value, string argumentName)
         {
             Requires.NotNull(value, argumentName);
             return value;
@@ -167,11 +167,13 @@ namespace Validation
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="value"/> is Null.</exception>
         /// <remarks>This method allows async methods to use <see cref="Requires.NotNull{T}(T,string)"/>
         /// without having to assign the result to local variables to avoid CSharp warnings.</remarks>
-        public static Task RequiresNotNull(this Task value, string argumentName)
+        public static System.Threading.Tasks.Task RequiresNotNull(this System.Threading.Tasks.Task value, string argumentName)
         {
             Requires.NotNull(value, argumentName);
             return value;
         }
+
+#endif // !NET20
 
         /// <summary>
         /// Throws an exception if the specified <paramref name="value"/> is <see cref="IntPtr.Zero"/>.
@@ -272,6 +274,8 @@ namespace Validation
             return value;
         }
 
+#if !NET20
+
         /// <summary>
         /// Throws an exception if the specified <paramref name="value"/> is Null, Empty,
         /// or Whitespace.
@@ -285,6 +289,8 @@ namespace Validation
             Requires.NotNullOrWhiteSpace(value, argumentName);
             return value;
         }
+
+#endif // !NET20
 
         /// <summary>
         /// Validates some expression describing the acceptable <paramref name="condition"/>
