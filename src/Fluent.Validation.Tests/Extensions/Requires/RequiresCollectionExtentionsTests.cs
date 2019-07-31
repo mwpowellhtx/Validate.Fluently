@@ -59,8 +59,25 @@ namespace Validation
             return () => values.RequiresNotNullEmptyOrNullElements(argumentName);
         }
 
+        private static IEnumerable<T> VerifyNotNullEmptyOrNullElements<T>(IEnumerable<T> values, string argumentName)
+            where T : class
+            => values.RequiresNotNullEmptyOrNullElements(argumentName);
+
+        private static Action VerifyNullOrNotNullElements<T>(IEnumerable<T> values, string argumentName, out string renderedMessage, string expectedMessage = null)
+            where T : class
+        {
+            expectedMessage = (expectedMessage ?? DefaultMessage).AssertNotNull().AssertNotEmpty();
+            renderedMessage = RenderArgumentMessage(expectedMessage, argumentName);
+            return () => values.RequiresNullOrNotNullElements(argumentName);
+        }
+
+        private static IEnumerable<T> VerifyNullOrNotNullElements<T>(IEnumerable<T> values, string argumentName)
+            where T : class
+            => values.RequiresNullOrNotNullElements(argumentName);
+
+        // TODO: TBD: there's enough going on here with these that we could potentially benefit from separating these tests into possibly several.
         [Fact]
-        public void Null_Collection_Throws()
+        public void Not_Null_Empty_Or_Null_Elements__Null_Collection_Throws()
             => VerifyNotNullEmptyOrNullElements(NullCollection, ArgumentName, out var renderedMessage, ValueCannotBeNullMessage)
                 .AssertThrows<ArgumentNullException>().Verify(ex =>
                 {
@@ -70,7 +87,7 @@ namespace Validation
                 });
 
         [Fact]
-        public void Empty_Collection_Throws()
+        public void Not_Null_Empty_Or_Null_Elements__Empty_Collection_Throws()
             => VerifyNotNullEmptyOrNullElements(EmptyCollection, ArgumentName, out var renderedMessage
                     , Format(EmptyCollectionMessageFormat, ArgumentName))
                 .AssertThrows<ArgumentException>().Verify(ex =>
@@ -81,7 +98,7 @@ namespace Validation
                 });
 
         [Fact]
-        public void Collection_With_Null_Elements_Throws()
+        public void Not_Null_Empty_Or_Null_Elements__Collection_With_Null_Elements_Throws()
             => VerifyNotNullEmptyOrNullElements(CollectionWithNulls, ArgumentName, out var renderedMessage
                     , Format(CollectionCannotContainNullsFormat, ArgumentName))
                 .AssertThrows<ArgumentException>().Verify(ex =>
@@ -91,16 +108,53 @@ namespace Validation
                     ex.Message.AssertNotNull().AssertEqual(renderedMessage);
                 });
 
-        private static IEnumerable<T> VerifyNotNullEmptyOrNullElements<T>(IEnumerable<T> values, string argumentName)
-            where T : class
-            => values.RequiresNotNullEmptyOrNullElements(argumentName);
-
         [Fact]
-        public void Valid_Collection_Does_Not_Throw()
+        public void Not_Null_Empty_Or_Null_Elements__Valid_Collection_Does_Not_Throw()
         {
             void Verify<T>(IEnumerable<T> values)
                 where T : class
                 => VerifyNotNullEmptyOrNullElements(values, ArgumentName).AssertNotNull().AssertSame(values);
+
+            Verify(ValidCollection);
+        }
+
+        [Fact]
+        public void Null_Or_Not_Null_Elements__Null_Collection_Throws()
+        {
+            void Verify<T>(IEnumerable<T> values)
+                where T : class
+                => VerifyNullOrNotNullElements(values, ArgumentName).AssertNull();
+
+            Verify(NullCollection);
+        }
+
+        [Fact]
+        public void Null_Or_Not_Null_Elements__Empty_Collection_Throws()
+        {
+            void Verify<T>(IEnumerable<T> values)
+                where T : class
+                => VerifyNullOrNotNullElements(values, ArgumentName).AssertNotNull().AssertSame(values);
+
+            Verify(EmptyCollection);
+        }
+
+        [Fact]
+        public void Null_Or_Not_Null_Elements__Collection_With_Null_Elements_Throws()
+            => VerifyNullOrNotNullElements(CollectionWithNulls, ArgumentName, out var renderedMessage
+                    , Format(CollectionCannotContainNullsFormat, ArgumentName))
+                .AssertThrows<ArgumentException>().Verify(ex =>
+                {
+                    ex.AssertNotNull().ParamName.AssertEqual(ArgumentName);
+                    renderedMessage.AssertNotNull().AssertNotEmpty();
+                    ex.Message.AssertNotNull().AssertEqual(renderedMessage);
+                });
+
+        [Fact]
+        public void Null_Or_Not_Null_Elements__Valid_Collection_Does_Not_Throw()
+        {
+            void Verify<T>(IEnumerable<T> values)
+                where T : class
+                => VerifyNullOrNotNullElements(values, ArgumentName).AssertNotNull().AssertSame(values);
 
             Verify(ValidCollection);
         }
