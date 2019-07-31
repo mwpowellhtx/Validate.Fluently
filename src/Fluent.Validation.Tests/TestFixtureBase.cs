@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Validation
 {
     using Xunit.Abstractions;
 
-    public abstract class TestFixtureBase
+    public abstract class TestFixtureBase : IDisposable
     {
         protected ITestOutputHelper OutputHelper { get; }
 
@@ -27,6 +28,26 @@ namespace Validation
             {
                 yield return x;
             }
+        }
+
+        /// <summary>
+        /// Disposes the Test Fixture.
+        /// </summary>
+        /// <param name="disposing"></param>
+        protected virtual void Dispose(bool disposing)
+        {
+        }
+
+        /// <summary>
+        /// Gets whether the Test Fixture IsDisposed.
+        /// </summary>
+        protected bool IsDisposed { get; private set; }
+
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            Dispose(true);
+            IsDisposed = true;
         }
     }
 }
