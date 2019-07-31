@@ -226,6 +226,24 @@ namespace Validation
         }
 
         /// <summary>
+        /// Throws an exception if the specified <paramref name="values"/> is Not Null,
+        /// and Has an Element with a Null value.
+        /// </summary>
+        /// <typeparam name="T">The type of the elements in the sequence.</typeparam>
+        /// <param name="values">The Values of the argument.</param>
+        /// <param name="argumentName">The name of the argument to include in any thrown exception.</param>
+        /// <returns>The <paramref name="values"/> after Not Null or Not Null Elements is Required.</returns>
+        /// <exception cref="ArgumentException">Thrown if the tested condition is false.</exception>
+        public static IEnumerable<T> RequiresNullOrNotNullElements<T>(this IEnumerable<T> values, string argumentName)
+            where T : class
+        {
+            // ReSharper disable PossibleMultipleEnumeration
+            Requires.NullOrNotNullElements(values, argumentName);
+            return values;
+            // ReSharper restore PossibleMultipleEnumeration
+        }
+
+        /// <summary>
         /// Throws an exception if the specified <paramref name="values"/> is Null,
         /// has no elements or has an element with a Null value.
         /// </summary>
@@ -266,24 +284,6 @@ namespace Validation
         {
             Requires.NotNullOrWhiteSpace(value, argumentName);
             return value;
-        }
-
-        /// <summary>
-        /// Throws an exception if the specified <paramref name="values"/> is Not Null,
-        /// and Has an Element with a Null value.
-        /// </summary>
-        /// <typeparam name="T">The type of the elements in the sequence.</typeparam>
-        /// <param name="values">The Values of the argument.</param>
-        /// <param name="argumentName">The name of the argument to include in any thrown exception.</param>
-        /// <returns>The <paramref name="values"/> after Not Null or Not Null Elements is Required.</returns>
-        /// <exception cref="ArgumentException">Thrown if the tested condition is false.</exception>
-        public static IEnumerable<T> RequiresNullOrNotNullElements<T>(this IEnumerable<T> values, string argumentName)
-            where T : class
-        {
-            // ReSharper disable PossibleMultipleEnumeration
-            Requires.NullOrNotNullElements(values, argumentName);
-            return values;
-            // ReSharper restore PossibleMultipleEnumeration
         }
 
         /// <summary>
