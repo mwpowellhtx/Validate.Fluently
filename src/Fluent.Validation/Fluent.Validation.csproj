@@ -6,10 +6,10 @@
     <TargetFrameworks>netstandard1.0;netstandard1.3</TargetFrameworks>
     <!--<TargetFrameworks>netstandard1.0;netstandard1.3;netstandard2.0</TargetFrameworks>-->
     <!--<TargetFrameworks>netstandard1.0;netstandard1.3;net45;net40;net20;portable-net45+win8+wpa81+wp8;portable-net4+sl50+win8+wpa81+wp8</TargetFrameworks>-->
-    <Version>1.0.0.82</Version>
-    <AssemblyVersion>1.0.0.82</AssemblyVersion>
-    <FileVersion>1.0.0.82</FileVersion>
-    <PackageVersion>1.0.0.82</PackageVersion>
+    <Version>1.0.0.83</Version>
+    <AssemblyVersion>1.0.0.83</AssemblyVersion>
+    <FileVersion>1.0.0.83</FileVersion>
+    <PackageVersion>1.0.0.83</PackageVersion>
   </PropertyGroup>
 
   <!-- ReSharper disable UnknownProperty -->
