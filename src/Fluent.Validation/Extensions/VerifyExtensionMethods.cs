@@ -9,12 +9,11 @@ namespace Validation
         /// </summary>
         /// <param name="_">A do not care place holder to root the extension method.</param>
         /// <param name="message">The message to use with the thrown exception.</param>
-        /// <returns>The root place holder after Fail Operation is Verified.</returns>
-        public static object VerifyFailOperation(this object _, FluentMessageCallback message)
-        {
-            Verify.FailOperation(message.Invoke());
-            return _;
-        }
+        /// <returns>Nothing. This method always throws. The signature claims to return an
+        /// exception to allow callers to throw this method to satisfy CSharp execution
+        /// path constraints.</returns>
+        public static Exception VerifyFailOperation(this object _, FluentMessageCallback message)
+            => Verify.FailOperation(message.Invoke());
 
         /// <summary>
         /// Throws an <see cref="InvalidOperationException"/>.
@@ -22,12 +21,34 @@ namespace Validation
         /// <typeparam name="T">The type of the root place holder.</typeparam>
         /// <param name="_">A do not care place holder to root the extension method.</param>
         /// <param name="message">The message to use with the thrown exception.</param>
+        /// <returns>Nothing. This method always throws. The signature claims to return an
+        /// exception to allow callers to throw this method to satisfy CSharp execution
+        /// path constraints.</returns>
+        public static Exception VerifyFailOperation<T>(this T _, FluentMessageCallback message)
+            => Verify.FailOperation(message.Invoke());
+
+        /// <summary>
+        /// Conditionally throws an <see cref="InvalidOperationException"/> based on the
+        /// <paramref name="condition"/>.
+        /// </summary>
+        /// <param name="_">A do not care place holder to root the extension method.</param>
+        /// <param name="condition">Condition must return true to avoid failing the operation.</param>
+        /// <param name="message">The message to use with the thrown exception.</param>
         /// <returns>The root place holder after Fail Operation is Verified.</returns>
-        public static T VerifyFailOperation<T>(this T _, FluentMessageCallback message)
-        {
-            Verify.FailOperation(message.Invoke());
-            return _;
-        }
+        public static Exception VerifyFailOperation(this object _, FluentConditionCallback<object> condition, FluentMessageCallback message)
+            => condition.Invoke(_) ? default : Verify.FailOperation(message.Invoke());
+
+        /// <summary>
+        /// Conditionally throws an <see cref="InvalidOperationException"/> based on the
+        /// <paramref name="condition"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of the root place holder.</typeparam>
+        /// <param name="_">A do not care place holder to root the extension method.</param>
+        /// <param name="condition">Condition must return true to avoid failing the operation.</param>
+        /// <param name="message">The message to use with the thrown exception.</param>
+        /// <returns>The root place holder after Fail Operation is Verified.</returns>
+        public static Exception VerifyFailOperation<T>(this T _, FluentConditionCallback<T> condition, FluentMessageCallback message)
+            => condition.Invoke(_) ? default : Verify.FailOperation(message.Invoke());
 
         /// <summary>
         /// Throws an <see cref="ObjectDisposedException"/> when <paramref name="condition"/>
