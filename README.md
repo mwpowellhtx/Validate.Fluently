@@ -2,8 +2,8 @@
 
 We add *Fluent* extension methods building on the [Validation](https://github.com/AArnott/Validation/) project.
 
-[![NuGet package](https://img.shields.io/nuget/v/Validate.Fluently.svg)](https://nuget.org/packages/Validate.Fluently)
-[![Validation NuGet package](https://img.shields.io/nuget/v/Validation.svg)](https://nuget.org/packages/Validation)
+[![NuGet package](https://img.shields.io/nuget/v/Validate.Fluently.svg?label=Validate.Fluently%20Nuget%20Package)](https://nuget.org/packages/Validate.Fluently)
+[![Validation NuGet package](https://img.shields.io/nuget/v/Validation.svg?label=Validation%20NuGet%20Package)](https://nuget.org/packages/Validation)
 
 This project is available as the [*Validate.Fluently*][1] NuGet package.
 
