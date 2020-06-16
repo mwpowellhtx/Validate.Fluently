@@ -33,18 +33,30 @@ set fluently_projects=Validate.Fluently
 
 :set_debug
 if "%1"=="--debug" (
-  set debug=true
-  goto :fini_arg
+    set debug=true
+    goto :fini_arg
+)
+
+:set_drive_letter
+if "%1"=="--drive-letter" (
+    set publish_local_root=%2
+    shift
+    goto :fini_arg
+)
+if "%1"=="--drive" (
+    set publish_local_root=%2
+    shift
+    goto :fini_arg
 )
 
 :set_destination
 if "%1"=="--local" (
-  set destination=local
-  goto :fini_arg
+    set destination=local
+    goto :fini_arg
 )
 if "%1"=="--nuget" (
-  set destination=nuget
-  goto :fini_arg
+    set destination=nuget
+    goto :fini_arg
 )
 
 :set_dry_run
@@ -67,9 +79,9 @@ if "%1" == "--wet-run" (
 
 :set_config
 if "%1"=="--config" (
-  set config=%2
-  shift
-  goto :fini_arg
+    set config=%2
+    shift
+    goto :fini_arg
 )
 
 :add_fluently_projects
@@ -131,8 +143,8 @@ if "%destination%" == "" set destination=local
 
 rem A NuGet API Key is required when the Destination is NuGet (lowercase).
 if "%destination%%nuget_api_key%"=="nuget" (
-  echo "NuGet API Key required in your 'MY_NUGET_API_KEY' Environment Variable."
-  goto :fini
+    echo "NuGet API Key required in your 'MY_NUGET_API_KEY' Environment Variable."
+    goto :fini
 )
 
 :verify_config
@@ -142,18 +154,19 @@ if "%config%" == "" set config=Release
 :eval_publications
 
 if "%debug%"=="true" (
-  echo config=%config%
-  echo destination=%destination%
-  echo nuget_api_key=%nuget_api_key%
-  echo nuget_api_src=%nuget_api_src%
-  echo publish_local_dir=%publish_local_dir%
-  goto :fini
+    echo config=%config%
+    echo destination=%destination%
+    echo nuget_api_key=%nuget_api_key%
+    echo nuget_api_src=%nuget_api_src%
+    echo publish_local_dir=%publish_local_dir%
+    goto :fini
 )
 
 set nupkg_ext=.nupkg
 
 set xcopy_exe=xcopy.exe
-set publish_local_dir=G:\Dev\NuGet\local\packages
+if "%publish_local_root%" == "" set publish_local_root=F:
+set publish_local_dir=%publish_local_root%\Dev\NuGet\local\packages
 
 set nuget_exe=nuget.exe
 set nuget_push_verbosity=detailed
