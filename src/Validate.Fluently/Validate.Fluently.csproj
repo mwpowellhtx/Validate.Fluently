@@ -1,65 +1,68 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-  </PropertyGroup>
+    <PropertyGroup>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    </PropertyGroup>
 
-  <PropertyGroup>
-    <Description>Provides a set of validation and runtime checking extension methods which permits a more fluent programming style.</Description>
-    <PackageTags>validation; input; integrity; check; checking</PackageTags>
-    <!-- TODO: TBD: we do not have the following, for the time being: net20;portable-net45+win8+wpa81+wp8;portable-net4+sl50+win8+wpa81+wp8 -->
-    <!-- TODO: TBD: Eventually it would probably be worth investigating the `portable´ targets as well, possibly... doubtful, however, concerning `net20´.  -->
-    <!-- TODO: TBD: Eventually, also, netstandard2.0? netstandard2.1? -->
-    <TargetFrameworks>netstandard1.0;netstandard1.3;net45;net40</TargetFrameworks>
-    <!--<TargetFrameworks>netstandard1.0;netstandard1.3;net45;net40;net20;portable-net45+win8+wpa81+wp8;portable-net4+sl50+win8+wpa81+wp8</TargetFrameworks>-->
-    <Version>1.0.0.9601</Version>
-    <AssemblyVersion>1.0.0.9601</AssemblyVersion>
-    <FileVersion>1.0.0.9601</FileVersion>
-    <PackageVersion>1.0.0.9601</PackageVersion>
-  </PropertyGroup>
+    <PropertyGroup>
+        <!-- TODO: TBD: we do not have the following, for the time being: net20;portable-net45+win8+wpa81+wp8;portable-net4+sl50+win8+wpa81+wp8 -->
+        <!-- TODO: TBD: Eventually it would probably be worth investigating the 'portable' targets as well, possibly... doubtful, however, concerning 'net20'.  -->
+        <TargetFrameworks>netstandard1.0;netstandard1.3;netstandard1.6;netstandard2.0;netstandard2.1;net45;net40</TargetFrameworks>
+        <!--<TargetFrameworks>netstandard1.0;netstandard1.3;net45;net40;net20;portable-net45+win8+wpa81+wp8;portable-net4+sl50+win8+wpa81+wp8</TargetFrameworks>-->
+        <Description>Provides a set of validation and runtime checking extension methods which permits a more fluent programming style.</Description>
+        <PackageTags>validation;input;integrity;check;checking</PackageTags>
+        <Version>1.0.1.18566</Version>
+        <AssemblyVersion>1.0.1.18566</AssemblyVersion>
+        <FileVersion>1.0.1.18566</FileVersion>
+        <PackageVersion>1.0.1.18566</PackageVersion>
+    </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>validate.fluently.snk</AssemblyOriginatorKeyFile>
-  </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+        <SignAssembly>true</SignAssembly>
+        <AssemblyOriginatorKeyFile>validate.fluently.snk</AssemblyOriginatorKeyFile>
+    </PropertyGroup>
 
-  <!-- ReSharper disable UnknownProperty -->
-  <PropertyGroup>
-    <DefineConstants Condition="'$(TargetFramework)' == 'netstandard1.0'">$(DefineConstants);NETSTANDARD1_0</DefineConstants>
-    <DefineConstants Condition="'$(TargetFramework)' == 'netstandard1.3'">$(DefineConstants);NETSTANDARD1_3</DefineConstants>
-  </PropertyGroup>
-  <!-- ReSharper restore UnknownProperty -->
+    <ItemGroup>
+        <None Remove="$(ProjectFileName).DotSettings" />
+    </ItemGroup>
 
-  <!-- ReSharper disable UnknownProperty -->
-  <PropertyGroup Condition="'$(Platform)' == 'AnyCPU'">
-    <DocumentationFile Condition="'$(TargetFramework)' == 'netstandard1.0'">bin\$(Configuration)\netstandard1.0\Validate.Fluently.xml</DocumentationFile>
-    <DocumentationFile Condition="'$(TargetFramework)' == 'netstandard1.3'">bin\$(Configuration)\netstandard1.3\Validate.Fluently.xml</DocumentationFile>
-    <DocumentationFile Condition="'$(TargetFramework)' == 'net45'">bin\$(Configuration)\net45\Validate.Fluently.xml</DocumentationFile>
-    <DocumentationFile Condition="'$(TargetFramework)' == 'net40'">bin\$(Configuration)\net40\Validate.Fluently.xml</DocumentationFile>
-    <!--<DocumentationFile Condition="'$(TargetFramework)' == 'net20'">bin\$(Configuration)\net20\Validate.Fluently.xml</DocumentationFile>-->
-    <!--<DocumentationFile Condition="'$(TargetFramework)' == 'portable-net45+win8+wpa81+wp8'">bin\$(Configuration)\portable-net45+win8+wpa81+wp8\Validate.Fluently.xml</DocumentationFile>-->
-    <!--<DocumentationFile Condition="'$(TargetFramework)' == 'portable-net4+sl50+win8+wpa81+wp8'">bin\$(Configuration)\portable-net4+sl50+win8+wpa81+wp8\Validate.Fluently.xml</DocumentationFile>-->
-  </PropertyGroup>
-  <!-- ReSharper restore UnknownProperty -->
+    <!-- ReSharper disable UnknownProperty -->
+    <PropertyGroup>
+        <DefineConstants Condition="'$(TargetFramework)' == 'netstandard1.0'">$(DefineConstants);NETSTANDARD1_0</DefineConstants>
+        <DefineConstants Condition="'$(TargetFramework)' == 'netstandard1.3'">$(DefineConstants);NETSTANDARD1_3</DefineConstants>
+        <DefineConstants Condition="'$(TargetFramework)' == 'netstandard1.6'">$(DefineConstants);NETSTANDARD1_6</DefineConstants>
+        <DefineConstants Condition="'$(TargetFramework)' == 'netstandard2.0'">$(DefineConstants);NETSTANDARD2_0</DefineConstants>
+    </PropertyGroup>
+    <!-- ReSharper restore UnknownProperty -->
 
-  <ItemGroup>
-    <None Remove="Validate.Fluently.csproj.DotSettings" />
-  </ItemGroup>
+    <!-- ReSharper disable UnknownProperty -->
+    <PropertyGroup Condition="'$(Platform)' == 'AnyCPU'">
+        <DocumentationFile Condition="'$(TargetFramework)' == 'netstandard1.0'">bin\$(Configuration)\netstandard1.0\Validate.Fluently.xml</DocumentationFile>
+        <DocumentationFile Condition="'$(TargetFramework)' == 'netstandard1.3'">bin\$(Configuration)\netstandard1.3\Validate.Fluently.xml</DocumentationFile>
+        <DocumentationFile Condition="'$(TargetFramework)' == 'netstandard1.6'">bin\$(Configuration)\netstandard1.6\Validate.Fluently.xml</DocumentationFile>
+        <DocumentationFile Condition="'$(TargetFramework)' == 'netstandard2.0'">bin\$(Configuration)\netstandard2.0\Validate.Fluently.xml</DocumentationFile>
+        <DocumentationFile Condition="'$(TargetFramework)' == 'net45'">bin\$(Configuration)\net45\Validate.Fluently.xml</DocumentationFile>
+        <DocumentationFile Condition="'$(TargetFramework)' == 'net40'">bin\$(Configuration)\net40\Validate.Fluently.xml</DocumentationFile>
+        <!--<DocumentationFile Condition="'$(TargetFramework)' == 'net20'">bin\$(Configuration)\net20\Validate.Fluently.xml</DocumentationFile>-->
+        <!--<DocumentationFile Condition="'$(TargetFramework)' == 'portable-net45+win8+wpa81+wp8'">bin\$(Configuration)\portable-net45+win8+wpa81+wp8\Validate.Fluently.xml</DocumentationFile>-->
+        <!--<DocumentationFile Condition="'$(TargetFramework)' == 'portable-net4+sl50+win8+wpa81+wp8'">bin\$(Configuration)\portable-net4+sl50+win8+wpa81+wp8\Validate.Fluently.xml</DocumentationFile>-->
+    </PropertyGroup>
+    <!-- ReSharper restore UnknownProperty -->
 
-  <ItemGroup Condition="'$(Configuration)' == 'Debug'">
-    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
-      <_Parameter1>$(MSBuildProjectName).Tests</_Parameter1>
-    </AssemblyAttribute>
-  </ItemGroup>
+    <ItemGroup Condition="'$(Configuration)' == 'Debug'">
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+            <_Parameter1>$(MSBuildProjectName).Tests</_Parameter1>
+        </AssemblyAttribute>
+    </ItemGroup>
 
-  <!-- ReSharper disable UnknownProperty -->
-  <ImportGroup>
-    <!-- Because Targets such as this do not seem to be imported for the multi-target use case. -->
-    <Import Project="..\packages\BumpAssemblyVersions\$(BumpAssemblyVersionsVersion)\build\BumpAssemblyVersions.targets" Condition="'$(TargetFrameworks)' != '' And Exists('..\packages\BumpAssemblyVersions\$(BumpAssemblyVersionsVersion)\build\BumpAssemblyVersions.targets')" />
-  </ImportGroup>
-  <!-- ReSharper restore UnknownProperty -->
+    <!-- ReSharper disable UnknownProperty -->
+    <ImportGroup>
+        <!-- Because Targets such as this do not seem to be imported for the multi-target use case. -->
+        <Import Project="..\packages\BumpAssemblyVersions\$(BumpAssemblyVersionsVersion)\build\BumpAssemblyVersions.targets" Condition="'$(TargetFrameworks)' != '' And Exists('..\packages\BumpAssemblyVersions\$(BumpAssemblyVersionsVersion)\build\BumpAssemblyVersions.targets')" />
+    </ImportGroup>
+    <!-- ReSharper restore UnknownProperty -->
 
-  <Import Project="..\Licensing.props" />
+    <Import Project="..\Licensing.props" />
 
 </Project>
