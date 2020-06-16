@@ -1,62 +1,62 @@
 <Project>
 
-  <PropertyGroup>
-    <Authors>Michael W. Powell</Authors>
-    <Company>Kingdom Software</Company>
-    <Product>Fluent.Validation</Product>
-    <Copyright>Copyright (c) 2019</Copyright>
-    <LangVersion>7.3</LangVersion>
-    <NoWarn>$(NoWarn);NU1603</NoWarn>
-  </PropertyGroup>
+    <PropertyGroup>
+        <Authors>Michael W. Powell</Authors>
+        <Company>Ellumination Technologies</Company>
+        <Product>Validate.Fluently</Product>
+        <Copyright>Copyright (c) 2019-2020</Copyright>
+        <LangVersion>7.3</LangVersion>
+        <NoWarn>$(NoWarn);NU1603</NoWarn>
+    </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Platform)'=='AnyCPU'">
-    <WarningLevel>2</WarningLevel>
-  </PropertyGroup>
+    <PropertyGroup Condition="'$(Platform)' == 'AnyCPU'">
+        <WarningLevel>2</WarningLevel>
+    </PropertyGroup>
 
-  <PropertyGroup>
-    <PackageProjectUrl>https://github.com/mwpowellhtx/Fluent.Validation</PackageProjectUrl>
-  </PropertyGroup>
+    <PropertyGroup>
+        <PackageProjectUrl>https://github.com/mwpowellhtx/Validate.Fluently</PackageProjectUrl>
+    </PropertyGroup>
 
-  <PropertyGroup>
-    <RootNamespace>Validation</RootNamespace>
-    <XunitVersion>2.4.1</XunitVersion>
-    <XunitFluentlyAssertVersion>1.3.1</XunitFluentlyAssertVersion>
-    <XunitFluentlyExceptionallyVersion>1.0</XunitFluentlyExceptionallyVersion>
-    <ValidationVersions>[2.4.22,3)</ValidationVersions>
-    <BumpAssemblyVersionsVersion>1.3.1</BumpAssemblyVersionsVersion>
-  </PropertyGroup>
+    <PropertyGroup>
+        <RootNamespace>Validation</RootNamespace>
+        <XunitVersion>2.4.1</XunitVersion>
+        <XunitFluentlyAssertVersion>1.6.1</XunitFluentlyAssertVersion>
+        <XunitFluentlyExceptionallyVersion>1.0.1</XunitFluentlyExceptionallyVersion>
+        <ValidationVersions>2.4.22</ValidationVersions>
+        <BumpAssemblyVersionsVersion>1.4.0</BumpAssemblyVersionsVersion>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Validation" Version="$(ValidationVersions)" />
-    <!-- TODO: TBD: We think we should be able to include: `runtime; build; native; contentfiles; analyzers´, but this runs into issues, and our bumps do not occur. -->
-    <!-- TODO: TBD: Best guess at the moment, something about the generated multi-target targets is prohibiting the conditions from ever occurring. -->
-    <!-- TODO: TBD: Workaround at the moment appears to be to omit `build´ from the `IncludeAssets´ for the time being, and manually import the targets at the project level. -->
-    <!-- We are looking for this precise version, because later on we will call out the targets by that same version. -->
-    <PackageReference Include="BumpAssemblyVersions" Version="[$(BumpAssemblyVersionsVersion)]">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Validation" Version="$(ValidationVersions)" />
+        <!-- TODO: TBD: We think we should be able to include: `runtime;build;native;contentfiles;analyzers´, but this runs into issues, and our bumps do not occur. -->
+        <!-- TODO: TBD: Best guess at the moment, something about the generated multi-target targets is prohibiting the conditions from ever occurring. -->
+        <!-- TODO: TBD: Workaround at the moment appears to be to omit `build´ from the `IncludeAssets´ for the time being, and manually import the targets at the project level. -->
+        <!-- We are looking for this precise version, because later on we will call out the targets by that same version. -->
+        <PackageReference Include="BumpAssemblyVersions" Version="$(BumpAssemblyVersionsVersion)">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime;native;contentfiles;analyzers</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
 
-  <ItemGroup Condition="Exists('..\packages\BumpAssemblyVersions\$(BumpAssemblyVersionsVersion)\build\BumpAssemblyVersions.targets')">
-    <BumpVersionSpec Include="Version" BuildProviderTemplate="SecondsSinceMidnight" Condition="'$(Configuration)' == 'Release'" />
-    <BumpVersionSpec Include="AssemblyVersion" BuildProviderTemplate="SecondsSinceMidnight" Condition="'$(Configuration)' == 'Release'" />
-    <BumpVersionSpec Include="FileVersion" BuildProviderTemplate="SecondsSinceMidnight" Condition="'$(Configuration)' == 'Release'" />
-    <BumpVersionSpec Include="PackageVersion" BuildProviderTemplate="SecondsSinceMidnight" Condition="'$(Configuration)' == 'Release'" />
+    <ItemGroup Condition="Exists('..\packages\BumpAssemblyVersions\$(BumpAssemblyVersionsVersion)\build\BumpAssemblyVersions.targets')">
+        <BumpVersionSpec Include="Version" PatchProviderTemplate="Increment" BuildProviderTemplate="SecondsSinceMidnight" Condition="'$(Configuration)' == 'Release'" />
+        <BumpVersionSpec Include="AssemblyVersion" PatchProviderTemplate="Increment" BuildProviderTemplate="SecondsSinceMidnight" Condition="'$(Configuration)' == 'Release'" />
+        <BumpVersionSpec Include="FileVersion" PatchProviderTemplate="Increment" BuildProviderTemplate="SecondsSinceMidnight" Condition="'$(Configuration)' == 'Release'" />
+        <BumpVersionSpec Include="PackageVersion" PatchProviderTemplate="Increment" BuildProviderTemplate="SecondsSinceMidnight" Condition="'$(Configuration)' == 'Release'" />
 
-    <!--<BumpVersionSpec Include="Version" PatchProviderTemplate="Increment" BuildProviderTemplate="SecondsSinceMidnight" Condition="'$(Configuration)' == 'Release'" />
-    <BumpVersionSpec Include="AssemblyVersion" PatchProviderTemplate="Increment" BuildProviderTemplate="SecondsSinceMidnight" Condition="'$(Configuration)' == 'Release'" />
-    <BumpVersionSpec Include="FileVersion" PatchProviderTemplate="Increment" BuildProviderTemplate="SecondsSinceMidnight" Condition="'$(Configuration)' == 'Release'" />
-    <BumpVersionSpec Include="PackageVersion" PatchProviderTemplate="Increment" BuildProviderTemplate="SecondsSinceMidnight" Condition="'$(Configuration)' == 'Release'" />-->
+        <!--<BumpVersionSpec Include="Version" PatchProviderTemplate="Increment" BuildProviderTemplate="SecondsSinceMidnight" Condition="'$(Configuration)' == 'Release'" />
+         <BumpVersionSpec Include="AssemblyVersion" PatchProviderTemplate="Increment" BuildProviderTemplate="SecondsSinceMidnight" Condition="'$(Configuration)' == 'Release'" />
+         <BumpVersionSpec Include="FileVersion" PatchProviderTemplate="Increment" BuildProviderTemplate="SecondsSinceMidnight" Condition="'$(Configuration)' == 'Release'" />
+         <BumpVersionSpec Include="PackageVersion" PatchProviderTemplate="Increment" BuildProviderTemplate="SecondsSinceMidnight" Condition="'$(Configuration)' == 'Release'" />-->
 
-    <BumpVersionSpec Include="Version" BuildProviderTemplate="Increment" Condition="'$(Configuration)' == 'Debug'" />
-    <BumpVersionSpec Include="AssemblyVersion" BuildProviderTemplate="Increment" Condition="'$(Configuration)' == 'Debug'" />
-    <BumpVersionSpec Include="FileVersion" BuildProviderTemplate="Increment" Condition="'$(Configuration)' == 'Debug'" />
-    <BumpVersionSpec Include="PackageVersion" BuildProviderTemplate="Increment" Condition="'$(Configuration)' == 'Debug'" />
-  </ItemGroup>
+        <BumpVersionSpec Include="Version" BuildProviderTemplate="Increment" Condition="'$(Configuration)' == 'Debug'" />
+        <BumpVersionSpec Include="AssemblyVersion" BuildProviderTemplate="Increment" Condition="'$(Configuration)' == 'Debug'" />
+        <BumpVersionSpec Include="FileVersion" BuildProviderTemplate="Increment" Condition="'$(Configuration)' == 'Debug'" />
+        <BumpVersionSpec Include="PackageVersion" BuildProviderTemplate="Increment" Condition="'$(Configuration)' == 'Debug'" />
+    </ItemGroup>
 
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="if exist &quot;$(ProjectDir)bin\$(Configuration)\*.nupkg&quot; del /f &quot;$(ProjectDir)bin\$(Configuration)\*.nupkg&quot;" />
-  </Target>
+    <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+        <Exec Command="if exist &quot;$(ProjectDir)bin\$(Configuration)\*.nupkg&quot; del /f &quot;$(ProjectDir)bin\$(Configuration)\*.nupkg&quot;" />
+    </Target>
 
 </Project>
